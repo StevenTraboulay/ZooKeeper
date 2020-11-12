@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const PORT = process.env.PORT || 3001;
 const app = express();
+//added  a file path to locate our application info in the public folder and make these static resources
+app.use(express.static('public'));
+
 // parse incoming string or array data
 //method build into express.js takes incoming POST data and convers it tokey/value pairings that can be accessed by req.body
 app.use(express.urlencoded({ extended: true }));
@@ -116,6 +119,21 @@ app.post('/api/animals', (req, res) => {
     const animal = createNewAnimal(req.body, animals);
     res.json(animal);
   }
+});
+
+//this has one job and its to respod with an HTML pagr in browser
+//using the"/" in get it makes the index page the root of the app
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+//this route will take us to the animals page. 
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
 });
 
 app.listen(PORT, () => {
